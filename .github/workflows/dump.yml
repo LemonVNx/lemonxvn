@@ -1,1 +1,26 @@
+name: Dump IL2CPP
+on: [push]
 
+jobs:
+  dump:
+    runs-on: ubuntu-latest
+    steps:
+      # Nâng cấp lên v4 ở đây
+      - uses: actions/checkout@v4
+      
+      - name: Tải công cụ Il2CppDumper
+        run: |
+          wget https://github.com/Perfare/Il2CppDumper/releases/download/v6.7.40/Il2CppDumper-linux-v6.7.40.zip
+          unzip Il2CppDumper-linux-v6.7.40.zip -d dumper
+          
+      - name: Tiến hành Dump Game
+        run: |
+          chmod +x dumper/Il2CppDumper
+          ./dumper/Il2CppDumper TempleRun global-metadata.dat ./output
+          
+      - name: Upload thành quả
+        # Nâng cấp lên v4 ở đây
+        uses: actions/upload-artifact@v4
+        with:
+          name: Dumped-Files
+          path: ./output/
